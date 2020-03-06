@@ -8,7 +8,34 @@
   
     <body>
         <canvas id="myCanvas" width="500" height="500"></canvas>
-      
+      <div id="splash">
+          <div>
+        <h1>Mario Kart</h1>
+      </div>
+      <div>
+        <p>Use the Up and Down arrow keys to collect the Coins to gain Points!<br/>Press Spacebar to begin</p>
+      </div>
+        </div>
+        
+        <div id='bg'>
+            <div id='container' style='display:none'>
+            </div>            
+        </div>
+        
+        <style>
+            #splash {
+      margin: auto;
+      position: ;
+      margin-top: 50px;
+      position: absolute;
+      left: 8px;
+      top: -42px;
+      width: 500px;
+      height: 500px;
+      background-color: whitesmoke;
+      color: #333;
+      text-align: center;
+}</style>
         <script>           
 // Intial Setup
             window.onload = function() {
@@ -18,112 +45,137 @@
                 canvas.height = canvas.height;
                 console.log(canvas)
               
-              
-              const img = new Image();
-              let mario = new Image();
-              let coin = new Image();
-              let shell = new Image();
+              let bg = new Image();
+                bg.src = "https://66.media.tumblr.com/140c4af8efe2f35c0ea928effeae2ba5/tumblr_pca4yxCW5v1rrftcdo1_540.png";
                 
-              img.onload = function() {
-                  ctx.drawImage(img, 0, 0)
-                  mario.src = "http://pixelartmaker.com/art/0450984eb0e24b5.png";
-                  shell.src = "https://thumbs.gfycat.com/CapitalIllinformedDore-size_restricted.gif";
-                  coin.src = "https://art.pixilart.com/910a8762ee4a7c7.png";
-                  
-              }                
-              img.src = "https://66.media.tumblr.com/140c4af8efe2f35c0ea928effeae2ba5/tumblr_pca4yxCW5v1rrftcdo1_540.png";
-                     
+              let mImg = new Image();
+                mImg.src = "http://pixelartmaker.com/art/0450984eb0e24b5.png";
+                let px = 0;
+                let py = 240;
+                
+              let cImg = new Image();
+                cImg.src = "https://art.pixilart.com/910a8762ee4a7c7.png";
+                let score = 0;
+                
+              let sImg = new Image();
+                sImg.src = "https://thumbs.gfycat.com/CapitalIllinformedDore-size_restricted.gif";  
+                
+                let player = {
+                    x : px,
+                    y : py,
+                    h : 60,
+                    w : 60,
+                }
+                
+                let coin = {
+                    x : 400,
+                    y : randomInteger(0, 490),
+                    w : 30,
+                    h : 30,
+                }
+                
+                let shell = {
+                x : 400,
+                y : randomInteger(0,490),
+                w : 30,
+                h : 30,
+                level : 480,
+                speed : 5
+                }
+                
             function clearcanvas() {
                 canvas.width = canvas.width;
             }   
 // Loops
             function randomInteger(min, max) {
                 return Math.floor(Math.random() * (max - min) ) + min;
-            }
+            }    
                 
-            let x = 480
-            let speed = 1
-            let randCoin = randomInteger(0,480)
-            let randShell = randomInteger(0,480)
-            let yPos = 200;
-            let xPos = 450;
-                
-            let score = 0
-            let level = 480
-            let lives = 1
-            
+// Collisions 
+
+
+              function collides(a, b)
+{
+    if (a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y < b.y + b.h &&
+        a.y + a.h > b.y) return true; 
+}   
+// Game Data       
+            let speed = 100
+            let lives = 3
+            let level = 1
+
 //   Animation of Entities
             function animate() {
                 requestAnimationFrame(animate);
                 ctx.clearRect(0, 0, 500, 500)
                 
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                ctx.drawImage(mario, 0, yPos, 60, 60) 
-                ctx.drawImage(coin, x, randCoin, 30, 30);
-                ctx.drawImage(shell, level, randShell, 30, 30);
-                x = x - 1
-                level = level - speed;
+                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(mImg, player.x, player.y, player.w, player.h) 
+                ctx.drawImage(cImg, coin.x, coin.y, coin.w, coin.h);
+                ctx.drawImage(sImg, shell.level, shell.y, shell.w, shell.h);
                 
-                if (x < -30) {
-                    x = 510
-                    randCoin = randomInteger(0,480)
+                ctx.font = "30px Arial"
+                ctx.fillStyle = "white"
+                ctx.fillText("Lives: ", 30, 30)
+                ctx.fillText(lives, 120, 30)
+                
+                ctx.fillText("Points: ", 300, 30)
+                ctx.fillText(score, 400, 30)
+                
+                ctx.fillText("Level: ", 180, 490)
+                ctx.fillText(level, 280, 490)
+                
+                coin.x = coin.x - 5
+                shell.level = shell.level - shell.speed;
+                
+                if (coin.x < -30) {
+                    coin.x = 510
+                    coin.y = randomInteger(0,480)
                 }
                 
-                if (level < -30) {
-                    level = 510
-                    randShell = randomInteger(0,480)
+                if (shell.level < -30) {
+                    shell.level = 510
+                    shell.y = randomInteger(0,480)
                 }
                 
 // Player Boundaries
-                if (yPos < -10) {
-                    yPos = 500
-                    ctx.drawImage(mario, 0, yPos, 60, 60)
+                if (player.y < -10) {
+                    player.y = 500
+                    ctx.drawImage(mImg, player.x, player.y, player.w, player.h)
                 }
                 
-                if (yPos > 500) {
-                    yPos = -10
-                    ctx.drawImage(mario, 0, yPos, 60, 60)
+                if (player.y > 500) {
+                    player.y = -10
+                    ctx.drawImage(mImg, player.x, player.y, player.w, player.h)
                 }
             }
                 
-// Player Movement        
+// KeyPresses        
 
             function doKeyDown(e) {
                 console.log(e.code)
                 
                 if (e.code == "ArrowDown"){
                     clearcanvas()
-                    yPos = yPos + 15
-                    ctx.drawImage(mario, 0, yPos, 60, 60) 
+                    player.y = player.y + 15
+                    ctx.drawImage(mImg, player.x, player.y, player.w, player.h) 
                 }
                 if (e.code == "ArrowUp"){
                     clearcanvas()
-                    yPos = yPos - 15                   
-                    ctx.drawImage(mario, 0, yPos, 60, 60) 
+                    player.y = player.y - 15                   
+                    ctx.drawImage(mImg, player.x, player.y, player.w, player.h) 
                 }              
-            }  
+              
+                if (e.keyCode == "32") {
+                    document.getElementById("splash").style.display = "none"; 
+                }
+            };
+
             window.addEventListener("keydown", doKeyDown, false); 
                 
-// Collisions 
-                console.log(shell)
-                
-                function collisionEnemy() {
-                    if (mario.x < shell.x + shell.width &&
-                       mario.x + mario.width > shell.x &&
-                       mario.y < shell.y + shell.height &&
-                       mario.y + mario.height > shell.y) {
-                       console.log("collissionkjabs")
-                    }
-                }
-//                 
-                
-// Score, Lives, Level 
-
-              
-// Game Over
-
-              collisionEnemy();
-            animate();
+                animate()
           };         
       </script>
     </body>
