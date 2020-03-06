@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Project 3</title>
+  </head>
+  
+    <body>
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+      
+        <script>           
+// Intial Setup
+            window.onload = function() {
+              const canvas = document.getElementById('myCanvas');
+              let ctx = canvas.getContext('2d');
+                canvas.width = canvas.width;
+                canvas.height = canvas.height;
+                console.log(canvas)
+              
+              
+              const img = new Image();
+              let mario = new Image();
+              let coin = new Image();
+              let shell = new Image();
+                
+              img.onload = function() {
+                  ctx.drawImage(img, 0, 0)
+                  mario.src = "http://pixelartmaker.com/art/0450984eb0e24b5.png";
+                  shell.src = "https://thumbs.gfycat.com/CapitalIllinformedDore-size_restricted.gif";
+                  coin.src = "https://art.pixilart.com/910a8762ee4a7c7.png";
+                  
+              }                
+              img.src = "https://66.media.tumblr.com/140c4af8efe2f35c0ea928effeae2ba5/tumblr_pca4yxCW5v1rrftcdo1_540.png";
+                     
+            function clearcanvas() {
+                canvas.width = canvas.width;
+            }   
+// Loops
+            function randomInteger(min, max) {
+                return Math.floor(Math.random() * (max - min) ) + min;
+            }
+                
+            let x = 480
+            let speed = 1
+            let randCoin = randomInteger(0,480)
+            let randShell = randomInteger(0,480)
+            let yPos = 200;
+            let xPos = 450;
+                
+            let score = 0
+            let level = 480
+            let lives = 1
+            
+//   Animation of Entities
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, 500, 500)
+                
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(mario, 0, yPos, 60, 60) 
+                ctx.drawImage(coin, x, randCoin, 30, 30);
+                ctx.drawImage(shell, level, randShell, 30, 30);
+                x = x - 1
+                level = level - speed;
+                
+                if (x < -30) {
+                    x = 510
+                    randCoin = randomInteger(0,480)
+                }
+                
+                if (level < -30) {
+                    level = 510
+                    randShell = randomInteger(0,480)
+                }
+                
+// Player Boundaries
+                if (yPos < -10) {
+                    yPos = 500
+                    ctx.drawImage(mario, 0, yPos, 60, 60)
+                }
+                
+                if (yPos > 500) {
+                    yPos = -10
+                    ctx.drawImage(mario, 0, yPos, 60, 60)
+                }
+            }
+                
+// Player Movement        
+
+            function doKeyDown(e) {
+                console.log(e.code)
+                
+                if (e.code == "ArrowDown"){
+                    clearcanvas()
+                    yPos = yPos + 15
+                    ctx.drawImage(mario, 0, yPos, 60, 60) 
+                }
+                if (e.code == "ArrowUp"){
+                    clearcanvas()
+                    yPos = yPos - 15                   
+                    ctx.drawImage(mario, 0, yPos, 60, 60) 
+                }              
+            }  
+            window.addEventListener("keydown", doKeyDown, false); 
+                
+// Collisions 
+                console.log(shell)
+                
+                function collisionEnemy() {
+                    if (mario.x < shell.x + shell.width &&
+                       mario.x + mario.width > shell.x &&
+                       mario.y < shell.y + shell.height &&
+                       mario.y + mario.height > shell.y) {
+                       console.log("collissionkjabs")
+                    }
+                }
+//                 
+                
+// Score, Lives, Level 
+
+              
+// Game Over
+
+              collisionEnemy();
+            animate();
+          };         
+      </script>
+    </body>
+</html>
