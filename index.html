@@ -85,7 +85,12 @@
                 
             function clearcanvas() {
                 canvas.width = canvas.width;
-            }   
+            }  
+// Game Data       
+            let speed = 100
+            let lives = 3
+            let level = 1
+
 // Loops
             function randomInteger(min, max) {
                 return Math.floor(Math.random() * (max - min) ) + min;
@@ -94,18 +99,26 @@
 // Collisions 
 
 
-              function collides(a, b)
-{
-    if (a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.h > b.y) return true; 
-}   
-// Game Data       
-            let speed = 100
-            let lives = 3
-            let level = 1
-
+              function collidesEnemy(a, b) {
+                  if (a.x < b.x + b.w &&
+                      a.x + a.w > b.x &&
+                      a.y < b.y + b.h &&
+                      a.y + a.h > b.y){
+                      lives = lives - 1;
+                      console.log("iaflkjsafa")
+                  }
+              }   
+                
+            function collidesScore(a, b) {
+                if (a.x < b.x + b.w &&
+                    a.x + a.w > b.x &&
+                    a.y < b.y + b.h &&
+                    a.y + a.h > b.y){
+                    score = score + 100;
+                    console.log("iaflkjsafa")
+                }
+            }  
+                
 //   Animation of Entities
             function animate() {
                 requestAnimationFrame(animate);
@@ -174,7 +187,8 @@
             };
 
             window.addEventListener("keydown", doKeyDown, false); 
-                
+                collidesEnemy(player, shell)
+                collidesScore(player, coin)
                 animate()
           };         
       </script>
