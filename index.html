@@ -99,21 +99,21 @@
 // Collisions 
 
 
-              function collidesEnemy(a, b) {
-                  if (a.x < b.x + b.w &&
-                      a.x + a.w > b.x &&
-                      a.y < b.y + b.h &&
-                      a.y + a.h > b.y){
+              function collidesEnemy(player, shell) {
+                  if (player.x < shell.x + shell.w &&
+                      player.x + player.w > shell.x &&
+                      player.y < shell.y + shell.h &&
+                      player.y + player.h > shell.y){
                       lives = lives - 1;
                       console.log("iaflkjsafa")
                   }
               }   
                 
-            function collidesScore(a, b) {
-                if (a.x < b.x + b.w &&
-                    a.x + a.w > b.x &&
-                    a.y < b.y + b.h &&
-                    a.y + a.h > b.y){
+            function collidesScore(player, coin) {
+                if (player.x < coin.x + coin.w &&
+                    player.x + player.w > coin.x &&
+                    player.y < coin.y + coin.h &&
+                    player.y + player.h > coin.y){
                     score = score + 100;
                     console.log("iaflkjsafa")
                 }
